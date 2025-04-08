@@ -99,3 +99,20 @@ genre = st.radio(
 )
 
 st.write(f"Nice choice {genre}")
+
+st.subheader("Dataframe editing")
+names = ['Alice', 'Bob', 'Charlie', 'David']
+cities = ['New York', 'Los Angeles', 'Chicago', 'Houston']
+data = {
+    'Name': names,
+    'Age': [25, 30, 35, 40],
+    'City': cities
+}
+data_df = pd.DataFrame(data)
+
+column_config = {
+    "Age": st.column_config.NumberColumn("Age", help="Enter the age"),
+    "City": st.column_config.SelectboxColumn("City", options=cities, help="Select city", default=cities[1])
+}
+edited_df = st.data_editor(data_df, hide_index=True, )
+
