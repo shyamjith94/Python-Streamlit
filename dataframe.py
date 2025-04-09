@@ -66,7 +66,20 @@ person_data = person_data.set_index("Country")
 st.dataframe(person_data)
 st.subheader("Graphical information")
 st.bar_chart(person_data, stack=False)
+
+box_data = formatted_df[['Date', 'Product', 'Boxes Shipped']]
+box_data['Month'] = box_data['Date'].apply(lambda x: x.month)
+box_data = box_data.groupby(['Month', 'Product'])['Boxes Shipped'].sum(
+).reset_index()
+
+box_data = box_data.pivot(index='Month', columns='Product', values='Boxes Shipped')
+st.subheader("Month and product moment")
+st.scatter_chart(box_data, )
+
+low_box_shipment = formatted_df.groupby(['Product', 'Country'])[
+    ['Boxes Shipped', "Amount"]].sum().reset_index().sort_values(['Boxes Shipped', 'Amount'], ascending=False)
 print("*" * 30)
-print(formatted_df.info())
-print(type(formatted_df["Date"].max().date()))
-print(person_data)
+print(formatted_df)
+print(low_box_shipment)
+print(low_box_shipment[low_box_shipment['Boxes Shipped'] <600])
+print(low_box_shipment[low_box_shipment['Product'] == "Baker's Choco Chips"])
